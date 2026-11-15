@@ -6,7 +6,9 @@ This is a community compatibility build, not an official TranslucentTB release. 
 
 ## Scope
 
-Fixes the case where TranslucentTB starts successfully but taskbar effects do not apply because `TaskbarFrame` is itself the `DesktopWindowXamlSource.Content`. The old code assumed the content was the frame's immediate parent. The patch matches the frame itself or its visual ancestors to the source content.
+Packages Charles Milette's existing, unreleased [upstream fix b8716c1](https://github.com/TranslucentTB/TranslucentTB/commit/b8716c1207037013515a289c365918cb4aea109e) on top of the official 2026.2 portable release. The compatibility fix is the original author's work.
+
+Fixes the case where TranslucentTB starts successfully but taskbar effects do not apply because `TaskbarFrame` is itself the `DesktopWindowXamlSource.Content`. The old code assumed the content was the frame's immediate parent. The upstream patch compares the source content to `TaskbarFrame.XamlRoot().Content()`.
 
 This does not claim to fix every 26H2 problem, including all XAML Diagnostics initialization failures, Explorer crashes, or taskbar-position changes.
 
@@ -30,7 +32,7 @@ Only `ExplorerTAP.dll` is rebuilt. The remaining application files come unchange
 ## Validation and limits
 
 - Reproduced the changed visual tree on Windows 11 26H2 Insider build 26340.9882, x64, one monitor.
-- An instrumented diagnostic build matched `TaskbarFrame` as the source content. Clear, opaque, and acrylic replaced the actual background Fill; blur and border operations succeeded; restoring the default restored the original Fill object.
+- An instrumented diagnostic build identified `TaskbarFrame` as the source content. Clear, opaque, and acrylic replaced the actual background Fill; blur and border operations succeeded; restoring the default restored the original Fill object.
 - The test machine has Windhawk taskbar modifications installed. It is not a clean Windows installation.
 - Multiple monitors, ARM64, older Windows builds, taskbar relocation, sleep/resume, and long-running use have not been verified. Please do not treat this as full compatibility certification.
 - Temporary diagnostic logging is excluded from the published patch and DLL.

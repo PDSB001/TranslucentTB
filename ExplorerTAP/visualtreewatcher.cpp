@@ -42,7 +42,8 @@ HRESULT VisualTreeWatcher::OnVisualTreeChange(ParentChildRelation relation, Visu
 		}
 		else if (type_view == L"Taskbar.TaskbarFrame")
 		{
-			const auto frame = FromHandle<wux::UIElement>(element.Handle);
+			// we found a taskbar. match it up to the xaml source.
+			const auto rootContent = FromHandle<wux::UIElement>(element.Handle).XamlRoot().Content();
 
 			for (auto it = m_NonMatchingXamlSources.begin(); it != m_NonMatchingXamlSources.end(); ++it)
 			{
@@ -57,16 +58,7 @@ HRESULT VisualTreeWatcher::OnVisualTreeChange(ParentChildRelation relation, Visu
 					continue;
 				}
 
-				// The source's content can be the frame itself (26H2) or one of its
-				// ancestors. XAML also inserts internal hosting elements, so the
-				// immediate visual parent is not necessarily the source's content.
-				auto ancestor = frame;
-				while (ancestor && ancestor != content)
-				{
-					ancestor = wux::Media::VisualTreeHelper::GetParent(ancestor).try_as<wux::UIElement>();
-				}
-
-				if (ancestor && content)
+				if (content == rootContent)
 				{
 					const auto nativeSource = xamlSource.as<IDesktopWindowXamlSourceNative>();
 

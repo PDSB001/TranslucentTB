@@ -39,7 +39,7 @@ jobs:
           Copy-Item ExplorerTAP/x64/Release/ExplorerTAP.dll portable/ExplorerTAP.dll -Force
           Copy-Item TEMPORARY-26H2.md portable/README-UNOFFICIAL-26H2.md
           Copy-Item LICENSE.md portable/LICENSE.md
-          @("Source repository: https://github.com/$env:GITHUB_REPOSITORY", "Source commit: $env:GITHUB_SHA", "Patch commit: 53eb162", "Unchanged binaries: upstream 2026.2 ($baseUrl)", 'Only ExplorerTAP.dll is replaced. The replacement DLL is unsigned.') | Set-Content portable/SOURCE.txt
+          @("Source repository: https://github.com/$env:GITHUB_REPOSITORY", "Source commit: $env:GITHUB_SHA", 'Upstream fix: b8716c1207037013515a289c365918cb4aea109e (Charles Milette)', "Unchanged binaries: upstream 2026.2 ($baseUrl)", 'Only ExplorerTAP.dll is replaced. The replacement DLL is unsigned.') | Set-Content portable/SOURCE.txt
           New-Item dist -ItemType Directory | Out-Null
           Compress-Archive portable/* dist/TranslucentTB-UNOFFICIAL-26H2-portable-x64.zip
           Get-FileHash dist/TranslucentTB-UNOFFICIAL-26H2-portable-x64.zip -Algorithm SHA256 | ForEach-Object { "$($_.Hash.ToLower())  $([IO.Path]::GetFileName($_.Path))" } | Set-Content dist/SHA256SUMS.txt
