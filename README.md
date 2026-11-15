@@ -1,5 +1,7 @@
 ﻿# TranslucentTB
 
+> **Unofficial temporary Windows 11 26H2 compatibility build.** See [downloads and instructions](TEMPORARY-26H2.md). This fork fixes the taskbar source-content matching regression and is not an official release. When the original authors publish a compatible update, we recommend uninstalling this temporary version and returning to the official version. Please support [upstream TranslucentTB](https://github.com/TranslucentTB/TranslucentTB).
+
 [![Liberapay patrons](https://img.shields.io/liberapay/patrons/TranslucentTB.svg)](https://liberapay.com/TranslucentTB/)
 [![Join on Discord](https://discordapp.com/api/guilds/304387206552879116/widget.png?style=shield)][Discord]
 [![Build Status](https://dev.azure.com/TranslucentTB/TranslucentTB/_apis/build/status%2FContinuous%20Integration%20Builds?branchName=develop)](https://dev.azure.com/TranslucentTB/TranslucentTB/_build)
