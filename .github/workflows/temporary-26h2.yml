@@ -1,0 +1,51 @@
+name: Temporary 26H2 portable build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-x64:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
+      - uses: NuGet/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
+        with:
+          nuget-version: '7.0.1'
+      - name: Restore ExplorerTAP dependencies
+        shell: pwsh
+        run: |
+          nuget restore ExplorerTAP/packages.config -PackagesDirectory packages -NonInteractive -Source https://api.nuget.org/v3/index.json
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          & "$env:VCPKG_INSTALLATION_ROOT/vcpkg.exe" integrate install
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Build patched ExplorerTAP (Release x64)
+        shell: pwsh
+        run: |
+          msbuild ExplorerTAP/ExplorerTAP.vcxproj /m /p:Configuration=Release /p:Platform=x64 /p:PreferredToolArchitecture=x64 /p:SkipSigning=True /v:minimal
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Assemble unofficial portable package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $baseUrl = 'https://github.com/TranslucentTB/TranslucentTB/releases/download/2026.2/TranslucentTB-portable-x64.zip'
+          Invoke-WebRequest $baseUrl -OutFile official.zip
+          $expected = '0DBE8E0255C20E131CDE536DCD0AE490D45989A7D360E26D0150DFF1922AC420'
+          if ((Get-FileHash official.zip -Algorithm SHA256).Hash -ne $expected) { throw 'Official base ZIP checksum mismatch' }
+          Expand-Archive official.zip portable
+          Copy-Item ExplorerTAP/x64/Release/ExplorerTAP.dll portable/ExplorerTAP.dll -Force
+          Copy-Item TEMPORARY-26H2.md portable/README-UNOFFICIAL-26H2.md
+          Copy-Item LICENSE.md portable/LICENSE.md
+          @("Source repository: https://github.com/$env:GITHUB_REPOSITORY", "Source commit: $env:GITHUB_SHA", "Patch commit: 53eb162", "Unchanged binaries: upstream 2026.2 ($baseUrl)", 'Only ExplorerTAP.dll is replaced. The replacement DLL is unsigned.') | Set-Content portable/SOURCE.txt
+          New-Item dist -ItemType Directory | Out-Null
+          Compress-Archive portable/* dist/TranslucentTB-UNOFFICIAL-26H2-portable-x64.zip
+          Get-FileHash dist/TranslucentTB-UNOFFICIAL-26H2-portable-x64.zip -Algorithm SHA256 | ForEach-Object { "$($_.Hash.ToLower())  $([IO.Path]::GetFileName($_.Path))" } | Set-Content dist/SHA256SUMS.txt
+          Copy-Item ExplorerTAP/x64/Release/ExplorerTAP.pdb dist/ExplorerTAP.pdb
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: TranslucentTB-UNOFFICIAL-26H2-x64
+          path: dist/*
+          if-no-files-found: error
