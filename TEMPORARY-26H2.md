@@ -14,6 +14,14 @@ This does not claim to fix every 26H2 problem, including all XAML Diagnostics in
 
 ## Download and use (x64 only)
 
+### EXE installer (recommended for convenient setup)
+
+Download `TranslucentTB-UNOFFICIAL-26H2-Setup-x64.exe` from the same release. It installs for the current user without administrator rights and offers desktop/start-menu shortcuts plus an optional sign-in startup shortcut. Exit the official app first. After switching builds, restart Windows before launching the temporary version. To remove the EXE-installed version, exit it, restart Windows, and uninstall **TranslucentTB (26H2 Temporary)** from Installed apps.
+
+The installer is unsigned and contains the same verified binaries as the ZIP. Its reproducible packaging source is in `packaging/`; run `packaging/build-installer.ps1` in PowerShell to rebuild it. Downloads of the portable package, compiler, and Chinese translation are pinned and checked with SHA-256.
+
+### Portable ZIP
+
 Download `TranslucentTB-UNOFFICIAL-26H2-portable-x64.zip` from [this fork's releases](https://github.com/PDSB001/TranslucentTB/releases). Verify its SHA-256 against the release's `SHA256SUMS.txt`.
 
 1. Exit the official TranslucentTB from its tray menu. Disable its automatic startup while trying this build. Back up your settings if needed.

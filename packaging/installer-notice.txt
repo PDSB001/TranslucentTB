@@ -1,0 +1,19 @@
+非官方临时版 / Unofficial temporary build
+
+这是基于原作者 Charles Milette 现有补丁制作的 Windows 11 26H2 x64 临时版。修复与应用的原始工作归功于 TranslucentTB 作者。
+
+安装前请从托盘退出官方 TranslucentTB，并暂时关闭其开机启动。不要同时运行官方版和临时版。
+
+首次安装或切换版本后建议重启 Windows，再从桌面或开始菜单快捷方式启动。
+
+原作者发布兼容更新后，建议卸载本临时版并回到官方版本：先退出临时版、重启 Windows，再从“设置 → 应用 → 已安装的应用”卸载 TranslucentTB (26H2 Temporary)，最后启用官方版。
+
+安装仅针对当前用户，不需要管理员权限。安装包未进行代码签名。本次仅验证了 26340.9882 x64 单显示器环境，不能保证所有预览版均兼容。
+
+This unofficial package uses Charles Milette's upstream fix b8716c1. All credit for the application and compatibility fix belongs to the original authors.
+
+Exit the official app and disable its automatic startup before installing. Restart Windows before switching builds. Do not run both versions together.
+
+When the original authors publish a compatible update, exit this temporary version, restart Windows, uninstall it from Installed apps, and return to the official version.
+
+The installer is per-user and unsigned. Only 26340.9882 x64 with one monitor has been tested.
